@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-axonic-primary;
+    font-family: 'Gotham', system-ui, -apple-system, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold text-axonic-primary;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-axonic-primary text-white rounded-lg hover:bg-axonic-secondary transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-axonic-primary/50 flex items-center justify-center;
+  }
+
+  .btn-secondary {
+    @apply px-4 py-2 border border-axonic-primary text-axonic-primary rounded-lg hover:bg-axonic-primary/5 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-axonic-primary/50 flex items-center justify-center;
+  }
+
+  .nav-link {
+    @apply flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors;
+  }
+
+  .nav-link-active {
+    @apply bg-axonic-yellow text-axonic-primary;
+  }
+
+  .nav-link-inactive {
+    @apply text-axonic-primary hover:bg-axonic-yellow/10;
+  }
+
+  /* Update all button styles to use Axonic colors */
+  button[type="submit"],
+  .btn-submit,
+  button.bg-blue-600 {
+    @apply bg-axonic-primary hover:bg-axonic-secondary text-white;
+  }
+
+  /* Form focus states */
+  input:focus, select:focus, textarea:focus {
+    @apply border-axonic-primary ring-axonic-primary/20;
+  }
+
+  /* Table headers */
+  th {
+    @apply bg-axonic-primary/5 text-axonic-primary;
+  }
+
+  /* Status indicators */
+  .status-badge {
+    @apply px-2 py-1 rounded-full text-xs font-semibold;
+  }
+
+  /* Navigation active state */
+  .nav-active {
+    @apply bg-axonic-yellow text-axonic-primary;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-axonic-primary/20 rounded-full hover:bg-axonic-primary/30;
+}
