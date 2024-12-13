@@ -4,6 +4,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
 from models.laundry import LaundryOrder,  OrderStatus, LaundryProcess
+ from schemas.department import Department
 # ProcessStatus, ProcessStep
 # OrderStatus
 # LossReport, Department,
