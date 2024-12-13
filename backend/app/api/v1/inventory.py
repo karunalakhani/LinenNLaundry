@@ -69,6 +69,7 @@ def get_inventory_alerts(db: Session = Depends(get_db)):
         logger.error(f"Error retrieving inventory alerts: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail="Internal server error")
 
+
 @router.get("/movement-history")
 def get_inventory_movement(
     start_date: Optional[datetime] = None,
@@ -80,7 +81,9 @@ def get_inventory_movement(
     Get inventory movement history with optional filters.
     """
     from models.laundry import LaundryOrder, LaundryOrderItem
-    
+    from models.linen import Linen
+
+    # Set default dates if not provided
     if not start_date:
         start_date = datetime.utcnow() - timedelta(days=30)
     if not end_date:
@@ -97,17 +100,22 @@ def get_inventory_movement(
     movements = []
     
     for order in orders:
+        # Iterate through LaundryOrderItems and join with Linen to fetch the type
+        order_items = []
+        for item in order.items:
+            linen = db.query(Linen).filter(Linen.id == item.linen_id).first()
+            linen_type = linen.type if linen else "Unknown"  # Default to "Unknown" if Linen is not found
+            
+            order_items.append({
+                "linen_type": linen_type,
+                "quantity": item.quantity
+            })
+        
         movements.append({
             "date": order.request_date,
             "type": "laundry_order",
             "department": order.department.name,
-            "items": [
-                {
-                    "linen_type": item.linen.type,
-                    "quantity": item.quantity
-                }
-                for item in order.items
-            ]
+            "items": order_items
         })
     
     return movements
@@ -118,6 +126,7 @@ def get_stock_levels(db: Session = Depends(get_db)):
     Get current stock levels by linen type and department.
     """
     from models.department import Department
+    from models.linen import Linen
     
     departments = db.query(Department).all()
     stock_levels = []
