@@ -13,7 +13,7 @@ def get_inventory_alerts(db: Session = Depends(get_db)):
     """
     Get inventory alerts for low stock and damaged items.
     """
-    from ...models.department import Department
+    from models.department import Department
     
     alerts = []
     departments = db.query(Department).all()
