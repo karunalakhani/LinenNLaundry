@@ -5,7 +5,13 @@ from dependencies import get_db
 from models.linen import Linen, LinenStatus
 from sqlalchemy import func
 from datetime import datetime, timedelta
-import logger
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+)
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 @router.get("/alerts")
