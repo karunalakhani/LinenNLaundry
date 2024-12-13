@@ -111,7 +111,7 @@ def get_inventory_status_report(db: Session = Depends(get_db)):
     """
     Generate inventory status report.
     """
-    from ...models.department import Department
+    from models.department import Department
     
     departments = db.query(Department).all()
     status_report = []
