@@ -5,6 +5,7 @@ from dependencies import get_db
 from models.linen import Linen, LinenStatus
 from sqlalchemy import func
 from datetime import datetime, timedelta
+import logger
 
 router = APIRouter()
 @router.get("/alerts")
