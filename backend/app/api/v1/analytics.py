@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
-from models import LaundryOrder, LossReport, Department, OrderStatus
+from models import laundry, loss, department
 from database import get_db
 
 router = APIRouter()
