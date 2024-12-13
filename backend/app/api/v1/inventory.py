@@ -54,7 +54,7 @@ def get_inventory_movement(
     """
     Get inventory movement history with optional filters.
     """
-    from ...models.laundry import LaundryOrder, LaundryOrderItem
+    from models.laundry import LaundryOrder, LaundryOrderItem
     
     if not start_date:
         start_date = datetime.utcnow() - timedelta(days=30)
@@ -92,7 +92,7 @@ def get_stock_levels(db: Session = Depends(get_db)):
     """
     Get current stock levels by linen type and department.
     """
-    from ...models.department import Department
+    from models.department import Department
     
     departments = db.query(Department).all()
     stock_levels = []
