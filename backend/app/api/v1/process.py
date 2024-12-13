@@ -9,7 +9,7 @@ from schemas.loss import LossReport, LossReportCreate, LossReportUpdate
 from schemas.process import ProcessStatus, ProcessStep,LaundryProcess
 # OrderStatus
 # LossReport, Department,
-from database import get_db
+from dependencies import get_db
 from crud import process_crud
 
 router = APIRouter()
