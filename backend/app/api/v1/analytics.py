@@ -3,6 +3,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 # from models import laundry, loss, department
+from schemas.laundry import LaundryOrder, OrderStatus
  # from models import LaundryOrder, LossReport, Department, OrderStatus
 from schemas.department import Department
 from schemas.loss import LossReport
