@@ -7,7 +7,7 @@ from schemas.laundry import LaundryOrder, OrderStatus
  # from models import LaundryOrder, LossReport, Department, OrderStatus
 from schemas.department import Department
 from schemas.loss import LossReport
-from database import get_db
+from dependencies import get_db
 
 router = APIRouter()
 
