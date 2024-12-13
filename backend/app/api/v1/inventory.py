@@ -7,42 +7,60 @@ from sqlalchemy import func
 from datetime import datetime, timedelta
 
 router = APIRouter()
-
 @router.get("/alerts")
 def get_inventory_alerts(db: Session = Depends(get_db)):
     """
     Get inventory alerts for low stock and damaged items.
     """
     from models.department import Department
-    
+
+    logger.info("Starting inventory alerts retrieval")
+
     alerts = []
-    departments = db.query(Department).all()
-    
-    for dept in departments:
-        available_count = db.query(func.count(Linen.id)).filter(
-            Linen.department_id == dept.id,
-            Linen.status == LinenStatus.AVAILABLE
-        ).scalar()
-        
-        if available_count <= (dept.linen_quota * dept.auto_reorder_threshold / 100):
+    try:
+        logger.info("Fetching all departments")
+        departments = db.query(Department).all()
+        logger.info(f"Retrieved {len(departments)} departments")
+
+        for dept in departments:
+            logger.info(f"Processing department: {dept.name}")
+
+            available_count = db.query(func.count(Linen.id)).filter(
+                Linen.department_id == dept.id,
+                Linen.status == LinenStatus.AVAILABLE
+            ).scalar()
+
+            logger.info(f"Department: {dept.name}, Available count: {available_count}")
+
+            if available_count <= (dept.linen_quota * dept.auto_reorder_threshold / 100):
+                logger.info(f"Low stock alert for department: {dept.name}")
+                alerts.append({
+                    "type": "low_stock",
+                    "department": dept.name,
+                    "current_stock": available_count,
+                    "threshold": dept.auto_reorder_threshold,
+                    "quota": dept.linen_quota
+                })
+
+        logger.info("Fetching damaged items")
+        damaged_items = db.query(Linen).filter(Linen.status == LinenStatus.DAMAGED).all()
+        logger.info(f"Retrieved {len(damaged_items)} damaged items")
+
+        for item in damaged_items:
+            logger.info(f"Processing damaged item: {item.serial_number}")
             alerts.append({
-                "type": "low_stock",
-                "department": dept.name,
-                "current_stock": available_count,
-                "threshold": dept.auto_reorder_threshold,
-                "quota": dept.linen_quota
+                "type": "damaged",
+                "linen_id": item.id,
+                "serial_number": item.serial_number,
+                "department": item.department.name if item.department else None
             })
-    
-    damaged_items = db.query(Linen).filter(Linen.status == LinenStatus.DAMAGED).all()
-    for item in damaged_items:
-        alerts.append({
-            "type": "damaged",
-            "linen_id": item.id,
-            "serial_number": item.serial_number,
-            "department": item.department.name if item.department else None
-        })
-    
-    return alerts
+
+        logger.info("Inventory alerts retrieval completed successfully")
+        return alerts
+
+    except Exception as e:
+        logger.error(f"Error retrieving inventory alerts: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @router.get("/movement-history")
 def get_inventory_movement(
