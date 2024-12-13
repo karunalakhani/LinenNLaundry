@@ -3,10 +3,10 @@ from datetime import datetime, timedelta
 from typing import Optional
 from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
-from models.laundry import LaundryOrder,  OrderStatus, LaundryProcess
+from models.laundry import LaundryOrder,  OrderStatus
 from schemas.department import Department
 from schemas.loss import LossReport, LossReportCreate, LossReportUpdate
-# ProcessStatus, ProcessStep
+from schemas.process import ProcessStatus, ProcessStep,LaundryProcess
 # OrderStatus
 # LossReport, Department,
 from database import get_db
